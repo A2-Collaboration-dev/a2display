@@ -4,31 +4,11 @@
 #include "matrixstack.h"
 #include "TH2Poly.h"
 #include "Rtypes.h"
+#include "TH2DrawTool.h"
 
 #include <set>
 
 #define TAPS_CONFIG "BaF2-PbWO4.dat"
-
-class TH2DrawTool: public matrixstack {
-private:
-    TH2Poly* hist;
-
-    std::vector<double> x;
-    std::vector<double> y;
-
-public:
-    TH2DrawTool( TH2Poly* target );
-    virtual ~TH2DrawTool() {}
-
-    void Draw( const matrixstack::Vector& vector );
-
-    typedef std::vector<matrixstack::Vector> point_list;
-
-    void Draw( const point_list& points );
-
-    Int_t FinishShape();
-    void ResetShape();
-};
 
 class TH2TAPS: public TH2Poly {
 protected:
@@ -44,9 +24,9 @@ protected:
     typedef matrixstack::Vector vec;
 
     virtual void Build();
-    void MakeLevel(TH2DrawTool& c, const vec& a, const vec& b, const UInt_t n );
+    void MakeLevel(a2::display::TH2DrawTool& c, const vec& a, const vec& b, const UInt_t n );
 
-    static const TH2DrawTool::point_list shape;
+    static const a2::display::TH2DrawTool::point_list shape;
     static const std::set<Int_t> bins_in_holes;
 
 public:
