@@ -1,23 +1,14 @@
-#ifndef XHIST_H
-#define XHIST_H
-
-#include "matrixstack.h"
-#include "TH2Poly.h"
-#include "Rtypes.h"
-#include "TH2DrawTool.h"
+#ifndef TH2CB_H
+#define TH2CB_H
 
 #include <set>
 
-#define TAPS_CONFIG "BaF2-PbWO4.dat"
+#include "matrixstack.h"
+#include "TH2DrawTool.h"
+#include "TH2Poly.h"
 
-class TH2TAPS: public TH2Poly {
-protected:
-    virtual void Build();
-public:
-    TH2TAPS() { Build(); }
-    virtual ~TH2TAPS() {}
-};
-
+namespace a2 {
+namespace display {
 
 class TH2CB: public TH2Poly {
 protected:
@@ -39,5 +30,8 @@ public:
     void FillNumber();
     void FillElementNumber();
 };
+
+}
+}
 
 #endif

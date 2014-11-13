@@ -27,14 +27,21 @@ link_directories(${ROOT_LIBRARY_DIR})
 
 include_directories("inc")
 
+set(SRCS
+    src/matrixstack.cpp
+    src/TH2DrawTool.cpp
+    src/TH2CB.cpp
+    src/TH2TAPS.cpp
+)
+
 get_property(allincdirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     PROPERTY INCLUDE_DIRECTORIES)
 
-ROOT_GENERATE_DICTIONARY("${CMAKE_CURRENT_SOURCE_DIR}/inc/XHist.h" "${CMAKE_CURRENT_SOURCE_DIR}/inc/LinkDef.h" "${CMAKE_BINARY_DIR}/Dict.cc" "${allincdirs}")
+ROOT_GENERATE_DICTIONARY("${CMAKE_CURRENT_SOURCE_DIR}/inc/a2display.h" "${CMAKE_CURRENT_SOURCE_DIR}/inc/LinkDef.h" "${CMAKE_BINARY_DIR}/Dict.cc" "${allincdirs}")
 
 file(GLOB_RECURSE ADDITIONAL_FILES "inc/*")
 set_source_files_properties(${ADDITIONAL_FILES} PROPERTIES HEADER_FILE_ONLY TRUE)
 
-add_library(${LIBNAME} SHARED  src/matrixstack.cpp src/XHist.cpp src/TH2DrawTool.cpp ${CMAKE_BINARY_DIR}/Dict.cc ${ADDITIONAL_FILES})
+add_library(${LIBNAME} SHARED  ${SRCS} ${CMAKE_BINARY_DIR}/Dict.cc ${ADDITIONAL_FILES})
 target_link_libraries(${LIBNAME} ${ROOT_LIBRARIES})
 
