@@ -107,21 +107,21 @@ TH2CB::TH2CB(const string &name, const string &title)
     SetNameTitle(name.c_str(),title.c_str());
 }
 
-Int_t TH2CB::GetBinOfElement(const UChar_t a, const UChar_t b, const UChar_t c)
+Int_t TH2CB::GetBinOfMMC(const UChar_t major, const UChar_t minor, const UChar_t crystal)
 {
-    const Int_t vbin = GetVBinOfElement(a,b,c);
+    const Int_t vbin = GetVBinOfMMC(major,minor,crystal);
     return binmap.at(vbin);
 }
 
-Int_t TH2CB::GetVBinOfElement(const UChar_t a, const UChar_t b, const UChar_t c)
+Int_t TH2CB::GetVBinOfMMC(const UChar_t major, const UChar_t minor, const UChar_t crystal)
 {
-    if (    ( a<1 || a> 20)
-         || ( b<1 || b>4 )
-         || ( c<1 || c>9 )  ) {
+    if (    ( major<1 || major> 20)
+         || ( minor<1 || minor>4 )
+         || ( crystal<1 || crystal>9 )  ) {
         return -5;  // invalid element specifications mapped to the "sea"
     }
 
-    return (a-1)*4*9 + (b-1)*9 + c;
+    return (major-1)*4*9 + (minor-1)*9 + crystal;
 }
 
 Int_t TH2CB::GetBinOfVBin(const Int_t vbin)
@@ -147,11 +147,11 @@ void TH2CB::FillCrystalNumber()
 
 void TH2CB::FillMMCNumbers()
 {
-    for( int m=1;m<=20;++m){
-        for( int n=1;n<=4;++n) {
-            for( int o=1;o<=9;++o) {
-                const Int_t number = m*100 + n*10+o;
-                const Int_t bin = GetBinOfElement(m,n,o);
+    for( int major=1;major<=20;++major){
+        for( int minor=1;minor<=4;++minor) {
+            for( int crystal=1;crystal<=9;++crystal) {
+                const Int_t number = major*100 + minor*10+crystal;
+                const Int_t bin = GetBinOfMMC(major,minor,crystal);
                 if(bin>0)
                     SetBinContent(bin,number);
             }
@@ -266,7 +266,7 @@ UInt_t TH2CB::GetElementOfCrystal(const UInt_t crystal)
 
 bool TH2CB::IsInHole(const UChar_t a, const UChar_t b, const UChar_t c)
 {
-    const Int_t vbin = GetVBinOfElement(a,b,c);
+    const Int_t vbin = GetVBinOfMMC(a,b,c);
     return bins_in_holes.find(vbin) != bins_in_holes.end();
 }
 
@@ -294,7 +294,7 @@ const std::set<Int_t> MakeListOfBinsInholes() {
     std::set<Int_t> list;
 
     // List of Element numbers in holes
-    UChar_t elements[2*6*4][3] = {
+    UChar_t holes[2*6*4][3] = {
         {2,1,2},
         {2,1,5},
         {2,1,6},
@@ -347,12 +347,12 @@ const std::set<Int_t> MakeListOfBinsInholes() {
     };
 
     // calculate vbin numbers of crystals in holes
-    for(UChar_t element=0; element < 2*6*4; ++element) {
+    for(UChar_t crystal=0; crystal < 2*6*4; ++crystal) {
 
-        list.insert( TH2CB::GetVBinOfElement(
-                         elements[element][0],
-                         elements[element][1],
-                         elements[element][2]));
+        list.insert( TH2CB::GetVBinOfMMC(
+                         holes[crystal][0],
+                         holes[crystal][1],
+                         holes[crystal][2]));
 
     }
 
@@ -365,11 +365,11 @@ const std::vector<Int_t> TH2CB::Make_binmap()
 
     Int_t bin=1;
 
-    for( int m=1;m<=20;++m){
-        for( int n=1;n<=4;++n) {
-            for( int o=1;o<=9;++o) {
+    for( int major=1;major<=20;++major){
+        for( int minor=1;minor<=4;++minor) {
+            for( int crystal=1;crystal<=9;++crystal) {
 
-                Int_t vbin = GetVBinOfElement(m,n,o);
+                Int_t vbin = GetVBinOfMMC(major,minor,crystal);
 
 
                 if( IsInHole(vbin) ) {

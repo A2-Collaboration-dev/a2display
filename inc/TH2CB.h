@@ -42,8 +42,8 @@ public:
     TH2CB( const std::string& name="", const std::string& title="" );
     virtual ~TH2CB() {}
 
-    static Int_t GetBinOfElement( const UChar_t a, const UChar_t b, const UChar_t c);
-    static Int_t GetVBinOfElement( const UChar_t a, const UChar_t b, const UChar_t c);
+    static Int_t GetBinOfMMC(const UChar_t major, const UChar_t minor, const UChar_t crystal);
+    static Int_t GetVBinOfMMC(const UChar_t major, const UChar_t minor, const UChar_t crystal);
     static Int_t GetBinOfVBin( const Int_t vbin );
 
     static bool IsInHole( const UChar_t a, const UChar_t b, const UChar_t c);
