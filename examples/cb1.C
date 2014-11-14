@@ -9,7 +9,6 @@ void cb1()
     TH2CB* cb = new TH2CB();
 
     cb->FillElementNumber();
-    cb->SetHoles(0);
 
     cb->Draw("text col");
 }

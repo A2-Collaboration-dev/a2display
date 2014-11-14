@@ -1,8 +1,6 @@
 #include "TH2CB.h"
 #include "TText.h"
 #include "Rtypes.h"
-
-
 #include <iostream>
 using namespace a2::display;
 //namespace a2 {
@@ -23,13 +21,16 @@ void TH2CB::Build()
     c.Y() = -b.Y();
 
 
+    std::set<Int_t>::const_iterator nexthole = bins_in_holes.begin();
+    UInt_t vbins=0;
+
     for(int i=0;i<5;++i) {
 
         for( int j=0; j<2; ++j) {
-            MakeLevel(tool,a,b,1);
+            MakeLevel(tool,1,nexthole,vbins);
             tool.Translate(a);
             tool.Scale(-1,-1);
-            MakeLevel(tool,a,b,1);
+            MakeLevel(tool,1,nexthole,vbins);
             tool.Translate(b);
             tool.Scale(-1,-1);
         }
@@ -54,12 +55,24 @@ void TH2CB::Build()
 
 }
 
-void TH2CB::MakeLevel(TH2DrawTool &c, const TH2CB::vec &a, const TH2CB::vec &b, const UInt_t n)
+void TH2CB::MakeLevel(TH2DrawTool &c, const UInt_t n, set<Int_t>::const_iterator &nexthole, UInt_t& vbins)
 {
 
+    const vec& a(shape.at(1));
+    const vec& b(shape.at(2));
+
     if(n>=4) {
-        c.Draw(shape);
-        Int_t bin = c.FinishShape();
+
+        ++vbins;
+
+        if( (nexthole == bins_in_holes.end()) || (*nexthole!=vbins)) {
+            c.Draw(shape);
+            c.FinishShape();
+        } else
+            if ( nexthole != bins_in_holes.end() ) {
+                   ++nexthole;
+        }
+
     } else {
         c.PushMatrix();
         c.Scale(1.0/n,1.0/n);
@@ -69,12 +82,12 @@ void TH2CB::MakeLevel(TH2DrawTool &c, const TH2CB::vec &a, const TH2CB::vec &b, 
             c.Translate( (n-row-1.0)* b );
             for( UInt_t t=0; t<triganles; ++t) {
                 if(t%2==0) {
-                    MakeLevel(c,a,b,n+1);
+                    MakeLevel(c,n+1,nexthole,vbins);
                     c.Translate(a);}
                 else {
                     c.Translate(b);
                     c.Scale(-1,-1);
-                    MakeLevel(c,a,b,n+1);
+                    MakeLevel(c,n+1,nexthole,vbins);
                     c.Translate(b);
                     c.Scale(-1,-1);
                 }
@@ -86,13 +99,21 @@ void TH2CB::MakeLevel(TH2DrawTool &c, const TH2CB::vec &a, const TH2CB::vec &b, 
 
 }
 
+
+
 TH2CB::TH2CB(const string &name, const string &title)
 {
     Build();
     SetNameTitle(name.c_str(),title.c_str());
 }
 
-Int_t TH2CB::GetElement(const UChar_t a, const UChar_t b, const UChar_t c)
+Int_t TH2CB::GetBinOfElement(const UChar_t a, const UChar_t b, const UChar_t c)
+{
+    const Int_t vbin = GetVBinOfElement(a,b,c);
+    return binmap.at(vbin);
+}
+
+Int_t TH2CB::GetVBinOfElement(const UChar_t a, const UChar_t b, const UChar_t c)
 {
     if (    ( a<1 || a> 20)
          || ( b<1 || b>4 )
@@ -103,15 +124,24 @@ Int_t TH2CB::GetElement(const UChar_t a, const UChar_t b, const UChar_t c)
     return (a-1)*4*9 + (b-1)*9 + c;
 }
 
-bool TH2CB::IsInHole(const Int_t bin)
+Int_t TH2CB::GetBinOfVBin(const Int_t vbin)
 {
-    return bins_in_holes.find(bin) != bins_in_holes.end();
+    return binmap.at(vbin);
 }
 
-void TH2CB::FillNumber()
+
+void TH2CB::FillBinNumber()
 {
     for(int i = 1; i<=GetNumberOfBins(); ++i) {
         SetBinContent(i,i);
+    }
+}
+
+void TH2CB::FillCrystalNumber()
+{
+    for(Int_t i=1; i<=720; ++i ) {
+        const Int_t bin = GetBinOfVBin(i);
+        SetBinContent(bin,i);
     }
 }
 
@@ -121,20 +151,55 @@ void TH2CB::FillElementNumber()
         for( int n=1;n<=4;++n) {
             for( int o=1;o<=9;++o) {
                 const Int_t number = m*100 + n*10+o;
-                const Int_t bin = GetElement(m,n,o);
-                SetBinContent(bin,number);
+                const Int_t bin = GetBinOfElement(m,n,o);
+                if(bin>0)
+                    SetBinContent(bin,number);
             }
         }
     }
 }
 
-
-void TH2CB::SetHoles(const double v)
+void TH2CB::FillHitpattern672(const std::vector<Double_t> &pattern)
 {
-    std::set<Int_t>::const_iterator bin;
-    for( bin= bins_in_holes.begin(); bin != bins_in_holes.end(); ++bin ) {
-        SetBinContent(*bin, v);
+    if(pattern.size()==672) {
+
+        for(int i=0; i<672; ++i ) {
+
+            const Int_t bin = i+1;
+
+            if(bin>1)
+                SetBinContent(i+1,pattern.at(i));
+        }
+    } else {
+        cerr << "TH2CB: FillHitpattern672: Wrong pattern size (" << pattern.size() << " / 672)" <<endl;
     }
+}
+
+void TH2CB::FillHitpattern720(const std::vector<Double_t> &pattern)
+{
+    if(pattern.size()==720) {
+
+        for(int i=0; i<720; ++i ) {
+
+            const Int_t bin = GetBinOfVBin(i+1);
+
+            if(bin>1)
+                SetBinContent(bin, pattern.at(i));
+        }
+    } else {
+        cerr << "TH2CB: FillHitpattern720: Wrong pattern size (" << pattern.size() << " / 720)" <<endl;
+    }
+}
+
+bool TH2CB::IsInHole(const UChar_t a, const UChar_t b, const UChar_t c)
+{
+    const Int_t vbin = GetVBinOfElement(a,b,c);
+    return bins_in_holes.find(vbin) != bins_in_holes.end();
+}
+
+bool TH2CB::IsInHole(const Int_t vbin)
+{
+    return bins_in_holes.find(vbin) != bins_in_holes.end();
 }
 
 /**
@@ -152,7 +217,10 @@ const TH2DrawTool::point_list MakeTriangle() {
 }
 
 const std::set<Int_t> MakeListOfBinsInholes() {
+
     std::set<Int_t> list;
+
+    // List of Element numbers in holes
     UChar_t elements[2*6*4][3] = {
         {2,1,2},
         {2,1,5},
@@ -205,9 +273,10 @@ const std::set<Int_t> MakeListOfBinsInholes() {
         {14,4,4}
     };
 
+    // calculate vbin numbers of crystals in holes
     for(UChar_t element=0; element < 2*6*4; ++element) {
 
-        list.insert( TH2CB::GetElement(
+        list.insert( TH2CB::GetVBinOfElement(
                          elements[element][0],
                          elements[element][1],
                          elements[element][2]));
@@ -217,8 +286,35 @@ const std::set<Int_t> MakeListOfBinsInholes() {
     return list;
 }
 
+const std::vector<Int_t> TH2CB::Make_binmap()
+{
+    std::vector<Int_t> map(721);
+
+    Int_t bin=1;
+
+    for( int m=1;m<=20;++m){
+        for( int n=1;n<=4;++n) {
+            for( int o=1;o<=9;++o) {
+
+                Int_t vbin = GetVBinOfElement(m,n,o);
+
+
+                if( IsInHole(vbin) ) {
+                    map[vbin] = -5;
+                } else {
+                    map[vbin] = bin++;
+                }
+
+            }
+        }
+    }
+    return map;
+}
+
+// to be called in this order. List of holes has to be build before the bin map can be created.
 const TH2DrawTool::point_list TH2CB::shape = MakeTriangle();
 const std::set<Int_t> TH2CB::bins_in_holes = MakeListOfBinsInholes();
+const std::vector<Int_t> TH2CB::binmap = TH2CB::Make_binmap();
 
 //}
 //}
