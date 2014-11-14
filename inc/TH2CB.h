@@ -9,6 +9,21 @@
 #include "TH2Poly.h"
 #include "Rtypes.h"
 
+/**
+ * @brief The TH2CB class
+ *
+ * A TH2Poly of the Crystal Ball mesh.
+ *
+ * bin number (bin): Index of a bin in the TH2Poly. [1..n], used to access the individual bins with SetBinContent(bin, value), etc.
+ *  A bin exists for every physical crystal. There are 672 crystals.
+ *
+ * virtual bin number (vbin): A virtual bin number including non-existant crystals in the hole regions, [1..720].
+ *
+ * Major-Minior-Crystal Number (MMC): The Crystal Ball is divided into major triganles (20) which again are subdivided into minor triangles (4).
+ *  Each mintor triangle consists of 9 crystals. The MMC number addesses crystals by their Major-Minor-Crystal indices.
+ *
+ * Element Number (element): The crystals are not cabled in the ordering of the crystals. Acqu uses elements.
+ */
 class TH2CB: public TH2Poly {
     ClassDef(TH2CB,1);
 
@@ -123,7 +138,18 @@ public:
      */
     void FillElements( const std::vector<Double_t>& pattern );
 
+    /**
+     * @brief Get the crystal number for an element number
+     * @param element The element number
+     * @return crystal number
+     */
     static UInt_t GetCrystalOfElement( const UInt_t element );
+
+    /**
+     * @brief Get the element number for a crystal number
+     * @param crystal The crystal number
+     * @return element number
+     */
     static UInt_t GetElementOfCrystal(const UInt_t crystal );
 
 };
