@@ -1,3 +1,10 @@
+/**
+  * @file cb_numbering.h
+  * Contains mapping arrays from crystal number to element number and vice versa.
+  * Generated from the CB_Numbering file in the wiki:
+  * http://wwwa2.kph.uni-mainz.de/intern/daqwiki/detectors/cb
+  */
+
 #include "Rtypes.h"
 
 // stores the crystal number for a given element number
