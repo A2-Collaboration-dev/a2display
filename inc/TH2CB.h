@@ -11,6 +11,8 @@ using namespace a2::display;
 //namespace display {
 
 class TH2CB: public TH2Poly {
+    ClassDef(TH2CB,1);
+
 protected:
     typedef matrixstack::Vector vec;
 
