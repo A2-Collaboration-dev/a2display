@@ -23,7 +23,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(ROOT "5.30" REQUIRED)
 
 include_directories(${ROOT_INCLUDES})
-link_directories(${ROOT_LIBRARY_DIR})
+link_directories(${ROOT_LIBRARY_DIR} ${CURRENT_BINARY_DIR})
 
 include_directories("inc")
 
@@ -45,3 +45,5 @@ set_source_files_properties(${ADDITIONAL_FILES} PROPERTIES HEADER_FILE_ONLY TRUE
 add_library(${LIBNAME} SHARED  ${SRCS} ${CMAKE_BINARY_DIR}/Dict.cc ${ADDITIONAL_FILES})
 target_link_libraries(${LIBNAME} ${ROOT_LIBRARIES})
 
+add_executable(compiled_example compiled_example.cpp)
+target_link_libraries(compiled_example ${LIBNAME} ${ROOT_LIBRARIES})
