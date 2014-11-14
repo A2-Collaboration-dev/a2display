@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
     }
 
     TH2CB* cb = new TH2CB();
-    cb->FillHitpattern720(v);
+    cb->FillElements(v);
     cb->Draw("text col");
 
     app.Run();

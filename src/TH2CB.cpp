@@ -1,6 +1,9 @@
 #include "TH2CB.h"
 #include "TText.h"
 #include "Rtypes.h"
+
+#include "cb_numbering.h"
+
 #include <iostream>
 using namespace a2::display;
 //namespace a2 {
@@ -141,11 +144,11 @@ void TH2CB::FillCrystalNumber()
 {
     for(Int_t i=1; i<=720; ++i ) {
         const Int_t bin = GetBinOfVBin(i);
-        SetBinContent(bin,i);
+        SetBinContent(bin,i-1);
     }
 }
 
-void TH2CB::FillElementNumber()
+void TH2CB::FillMMCNumbers()
 {
     for( int m=1;m<=20;++m){
         for( int n=1;n<=4;++n) {
@@ -159,7 +162,14 @@ void TH2CB::FillElementNumber()
     }
 }
 
-void TH2CB::FillHitpattern672(const std::vector<Double_t> &pattern)
+void TH2CB::FillElementNumers()
+{
+    for(Int_t i=0; i<720; ++i ) {
+        SetElement(i,i);
+    }
+}
+
+void TH2CB::FillCrystals672(const std::vector<Double_t> &pattern)
 {
     if(pattern.size()==672) {
 
@@ -168,11 +178,11 @@ void TH2CB::FillHitpattern672(const std::vector<Double_t> &pattern)
             SetCrystal672(i, pattern.at(i));
         }
     } else {
-        cerr << "TH2CB: FillHitpattern672: Wrong pattern size (" << pattern.size() << " / 672)" <<endl;
+        cerr << "TH2CB: FillCrystals672: Wrong pattern size (" << pattern.size() << " / 672)" <<endl;
     }
 }
 
-void TH2CB::FillHitpattern720(const std::vector<Double_t> &pattern)
+void TH2CB::FillCrystals720(const std::vector<Double_t> &pattern)
 {
     if(pattern.size()==720) {
 
@@ -182,7 +192,7 @@ void TH2CB::FillHitpattern720(const std::vector<Double_t> &pattern)
 
         }
     } else {
-        cerr << "TH2CB: FillHitpattern720: Wrong pattern size (" << pattern.size() << " / 720)" <<endl;
+        cerr << "TH2CB: FillCrystals720: Wrong pattern size (" << pattern.size() << " / 720)" <<endl;
     }
 }
 
@@ -211,6 +221,50 @@ void TH2CB::SetCrystal720(const UInt_t i, Double_t value)
 
     if(bin>0)
         return SetBinContent(bin, value);
+}
+
+Double_t TH2CB::GetElement(const UInt_t element) const
+{
+    return GetCrystal720(GetCrystalOfElement(element));
+}
+
+void TH2CB::SetElement(const UInt_t element, Double_t value)
+{
+    SetCrystal720(GetCrystalOfElement(element), value);
+}
+
+void TH2CB::FillElements(const std::vector<Double_t> &pattern)
+{
+    if(pattern.size()==720) {
+
+        for(int i=0; i<720; ++i ) {
+
+            SetElement(i,pattern.at(i));
+
+        }
+    } else {
+        cerr << "TH2CB: FillElements: Wrong pattern size (" << pattern.size() << " / 720)" <<endl;
+    }
+}
+
+UInt_t TH2CB::GetCrystalOfElement(const UInt_t element)
+{
+    if(element<720)
+        return crystal_number[element];
+    else {
+        cerr << "TH2CB::GetCrystalOfElement: Element number out of bounds: (" << element << " / 720)" << endl;
+        return 0;
+    }
+}
+
+UInt_t TH2CB::GetElementOfCrystal(const UInt_t crystal)
+{
+    if(crystal<720)
+        return element_number[crystal];
+    else {
+        cerr << "TH2CB::GetElementOfCrystal: Crystal number out of bounds: (" << crystal << " / 720)" << endl;
+        return 0;
+    }
 }
 
 bool TH2CB::IsInHole(const UChar_t a, const UChar_t b, const UChar_t c)

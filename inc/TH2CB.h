@@ -7,6 +7,7 @@
 #include "matrixstack.h"
 #include "TH2DrawTool.h"
 #include "TH2Poly.h"
+#include "Rtypes.h"
 
 class TH2CB: public TH2Poly {
     ClassDef(TH2CB,1);
@@ -39,30 +40,35 @@ public:
     void FillBinNumber();
 
     /**
-     * @brief Fill the crystal number.
+     * @brief Fill in the crystal numbers.
      *
-     * Crystal numers count in the same way as the element numbers (ex.: 1/1/1), stating with 1 (conflit?)
+     * Crystal numers count in the same way as the element numbers (ex.: 1/1/1), stating with 0.
      */
     void FillCrystalNumber();
 
     /**
-     * @brief Fill the element numbers in. ex: 1/1/1 -> 111 and 14/2/8 -> 1428.
+     * @brief Fill the Major-Minor-Crystal numbers in. ex: 1/1/1 -> 111 and 14/2/8 -> 1428.
      */
-    void FillElementNumber();
+    void FillMMCNumbers();
+
+    /**
+     * @brief Fill in the element numbers. Crystal numers are mapped to element numbers.
+     */
+    void FillElementNumers();
 
     /**
      * @brief Fill a hit pattern (unmapped), only containing existing crystals
      * @param pattern Vector of the lenfth 672 (is checked!)
-     * @see FillHitpattern720()
+     * @see FillCrystals720()
      */
-    void FillHitpattern672( const std::vector<Double_t>& pattern );
+    void FillCrystals672( const std::vector<Double_t>& pattern );
 
     /**
      * @brief Fil a hit pattern (unmapped), containing crystals in holes
      * @param pattern Vector of the lenfth 720 (is checked!)
-     * @see FillHitpattern672()
+     * @see FillCrystals672()
      */
-    void FillHitpattern720( const std::vector<Double_t>& pattern );
+    void FillCrystals720( const std::vector<Double_t>& pattern );
 
     /**
      * @brief Get value of a crystal (unmapped), only counting exising crystals (no holes)
@@ -94,6 +100,31 @@ public:
      */
     void SetCrystal720(const UInt_t i, Double_t value);
 
+    /**
+     * @brief Get value of an element (mapped)
+     * @param element Element number [0..720]
+     * @return Content of the crystal, 0 if is inside a hole
+     */
+    Double_t GetElement(const UInt_t element) const;
+
+    /**
+     * @brief Set the value of an element (mapped)
+     * @param element Element number [0..720]
+     * @param value Value to set it it
+     * @see SetCrystal720()
+     */
+    void SetElement(const UInt_t element, Double_t value);
+
+    /**
+     * @brief Fill a hit pattern (mapped), ordered by element numers
+     * @param pattern Vector of the lenfth 720 (is checked!)
+     * @see FillCrystals720()
+     * @see FillCrystals672()
+     */
+    void FillElements( const std::vector<Double_t>& pattern );
+
+    static UInt_t GetCrystalOfElement( const UInt_t element );
+    static UInt_t GetElementOfCrystal(const UInt_t crystal );
 
 };
 
