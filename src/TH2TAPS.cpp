@@ -4,8 +4,9 @@
 #include <fstream>
 #include <iostream>
 
-namespace a2 {
-namespace display {
+using namespace a2::display;
+//namespace a2 {
+//namespace display {
 
 using namespace std;
 
@@ -120,5 +121,5 @@ void TH2TAPS::Build()
 
 }
 
-}
-}
+//}
+//}

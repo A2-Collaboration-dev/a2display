@@ -3,8 +3,10 @@
 #include "Rtypes.h"
 
 
-namespace a2 {
-namespace display {
+#include <iostream>
+using namespace a2::display;
+//namespace a2 {
+//namespace display {
 
 using namespace std;
 
@@ -218,5 +220,5 @@ const std::set<Int_t> MakeListOfBinsInholes() {
 const TH2DrawTool::point_list TH2CB::shape = MakeTriangle();
 const std::set<Int_t> TH2CB::bins_in_holes = MakeListOfBinsInholes();
 
-}
-}
+//}
+//}

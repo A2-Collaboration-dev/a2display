@@ -6,9 +6,9 @@
 #include "matrixstack.h"
 #include "TH2DrawTool.h"
 #include "TH2Poly.h"
-
-namespace a2 {
-namespace display {
+using namespace a2::display;
+//namespace a2 {
+//namespace display {
 
 class TH2CB: public TH2Poly {
 protected:
@@ -31,7 +31,7 @@ public:
     void FillElementNumber();
 };
 
-}
-}
+//}
+//}
 
 #endif
