@@ -15,12 +15,6 @@ void TH2CB::Build()
     const vec& a(shape.at(1));
     const vec& b(shape.at(2));
 
-
-    vec c;
-    c.X() = b.X();
-    c.Y() = -b.Y();
-
-
     std::set<Int_t>::const_iterator nexthole = bins_in_holes.begin();
     UInt_t vbins=0;
 
