@@ -165,10 +165,7 @@ void TH2CB::FillHitpattern672(const std::vector<Double_t> &pattern)
 
         for(int i=0; i<672; ++i ) {
 
-            const Int_t bin = i+1;
-
-            if(bin>1)
-                SetBinContent(i+1,pattern.at(i));
+            SetCrystal672(i, pattern.at(i));
         }
     } else {
         cerr << "TH2CB: FillHitpattern672: Wrong pattern size (" << pattern.size() << " / 672)" <<endl;
@@ -181,14 +178,39 @@ void TH2CB::FillHitpattern720(const std::vector<Double_t> &pattern)
 
         for(int i=0; i<720; ++i ) {
 
-            const Int_t bin = GetBinOfVBin(i+1);
+            SetCrystal720(i,pattern.at(i));
 
-            if(bin>1)
-                SetBinContent(bin, pattern.at(i));
         }
     } else {
         cerr << "TH2CB: FillHitpattern720: Wrong pattern size (" << pattern.size() << " / 720)" <<endl;
     }
+}
+
+Double_t TH2CB::GetCrystal672(const UInt_t i) const
+{
+    return GetBinContent(i+1);
+}
+
+Double_t TH2CB::GetCrystal720(const UInt_t i) const
+{
+    const Int_t bin = GetBinOfVBin(i+1);
+    if(bin>0)
+        return GetBinContent(bin);
+    else
+        return 0;
+}
+
+void TH2CB::SetCrystal672(const UInt_t i, Double_t value)
+{
+    SetBinContent(i+1, value);
+}
+
+void TH2CB::SetCrystal720(const UInt_t i, Double_t value)
+{
+    const Int_t bin = GetBinOfVBin(i+1);
+
+    if(bin>0)
+        return SetBinContent(bin, value);
 }
 
 bool TH2CB::IsInHole(const UChar_t a, const UChar_t b, const UChar_t c)
