@@ -5,9 +5,6 @@
 #include "cb_numbering.h"
 
 #include <iostream>
-using namespace a2::display;
-//namespace a2 {
-//namespace display {
 
 using namespace std;
 
@@ -391,6 +388,3 @@ const std::vector<Int_t> TH2CB::Make_binmap()
 const TH2DrawTool::point_list TH2CB::shape = MakeTriangle();
 const std::set<Int_t> TH2CB::bins_in_holes = MakeListOfBinsInholes();
 const std::vector<Int_t> TH2CB::binmap = TH2CB::Make_binmap();
-
-//}
-//}

@@ -3,9 +3,6 @@
 
 using namespace std;
 
-namespace a2 {
-namespace display {
-
 TH2DrawTool::TH2DrawTool(TH2Poly *target)
 {
     hist = target;
@@ -40,7 +37,3 @@ void TH2DrawTool::ResetShape()
     x.clear();
     y.clear();
 }
-
-}
-}
-

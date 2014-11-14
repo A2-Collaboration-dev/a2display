@@ -7,9 +7,6 @@ class TH2Poly;
 
 #include "matrixstack.h"
 
-namespace a2 {
-namespace display {
-
 class TH2DrawTool: public matrixstack {
 private:
     TH2Poly* hist;
@@ -30,8 +27,5 @@ public:
     Int_t FinishShape();
     void ResetShape();
 };
-
-}
-}
 
 #endif

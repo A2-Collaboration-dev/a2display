@@ -3,11 +3,8 @@
 
 #include "TH2DrawTool.h"
 #include "TH2Poly.h"
-using namespace a2::display;
-#define TAPS_CONFIG "BaF2-PbWO4.dat"
 
-//namespace a2 {
-//namespace display {
+#define TAPS_CONFIG "BaF2-PbWO4.dat"
 
 class TH2TAPS: public TH2Poly {
     ClassDef(TH2TAPS,1);
@@ -18,8 +15,5 @@ public:
     TH2TAPS() { Build(); }
     virtual ~TH2TAPS() {}
 };
-
-//}
-//}
 
 #endif

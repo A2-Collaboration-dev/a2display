@@ -16,9 +16,9 @@ protected:
     typedef matrixstack::Vector vec;
 
     virtual void Build();
-    void MakeLevel(a2::display::TH2DrawTool& c, const UInt_t n, std::set<Int_t>::const_iterator& nexthole, UInt_t& vbins);
+    void MakeLevel(TH2DrawTool& c, const UInt_t n, std::set<Int_t>::const_iterator& nexthole, UInt_t& vbins);
 
-    static const a2::display::TH2DrawTool::point_list shape;    // shape of a crystal
+    static const TH2DrawTool::point_list shape;    // shape of a crystal
     static const std::set<Int_t> bins_in_holes;     // vbin numbers in holes
     static const std::vector<Int_t> binmap;         // maps vbin to bin
     static const std::vector<Int_t> Make_binmap();
