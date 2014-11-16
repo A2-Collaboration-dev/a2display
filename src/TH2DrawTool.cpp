@@ -19,6 +19,9 @@ void TH2DrawTool::Draw(const matrixstack::Vector &vector)
 
 void TH2DrawTool::Draw(const TH2DrawTool::point_list &points)
 {
+    x.reserve(x.size()+points.size());
+    y.reserve(y.size()+points.size());
+
     point_list::const_iterator i;
     for(i=points.begin(); i!= points.end(); ++i) {
         Draw( *i );
