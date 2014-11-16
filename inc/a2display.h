@@ -3,9 +3,13 @@
 
 #include "TH2Poly.h"
 #include <string>
+#include "matrixstack.h"
 
 class TH2Crystals: public TH2Poly {
 ClassDef(TH2Crystals,1);
+
+protected:
+    typedef matrixstack::Vector vec;
 
 public:
 

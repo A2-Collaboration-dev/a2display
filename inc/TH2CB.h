@@ -31,7 +31,6 @@ class TH2CB: public TH2Crystals {
     ClassDef(TH2CB,1);
 
 protected:
-    typedef matrixstack::Vector vec;
 
     virtual void Build();
     void MakeLevel(TH2DrawTool& c, const UInt_t n, std::set<Int_t>::const_iterator& nexthole, UInt_t& vbins);
