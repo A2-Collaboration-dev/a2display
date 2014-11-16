@@ -63,7 +63,6 @@ void TH2TAPS::Build()
 
     for( UInt_t i=0; i<NUM_TAPS_CRYSTALS; ++i ) {
 
-        UInt_t n;
         const vec pos (taps_positions[i].x,
                        taps_positions[i].y);
         const UChar_t& type = taps_positions[i].type;
