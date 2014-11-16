@@ -1,5 +1,6 @@
 #include "TH2TAPS.h"
 #include "TMath.h"
+#include "TH2Poly.h"
 
 #include "taps_positions.h"
 
@@ -96,6 +97,8 @@ void TH2TAPS::Build()
     }
 
     SetStats(kFALSE);
+    SetXTitle("x [cm]");
+    SetYTitle("y [cm]");
 
 }
 
