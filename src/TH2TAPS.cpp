@@ -11,48 +11,52 @@ TH2TAPS::TH2TAPS(const string &name, const string &title): TH2Crystals(name,titl
     Build();
 }
 
-void TH2TAPS::Build()
+TH2DrawTool::point_list TH2TAPS::MakeBaF2Shape()
 {
-    TH2DrawTool c(this);
-    typedef matrixstack::Vector vec;
+    matrixstack s;
+    TH2DrawTool::point_list shape(7);
 
-    TH2DrawTool::point_list baf_shape(7);
-    TH2DrawTool::point_list pbwo4_shape(5);
+    const vec va(a,0);
 
-    // Build a BaF2 crystal
-    const double a = 3.464; // edgle length of BaF2 in cm
-    const double b = 3.0;   // half distance of parallels of BaF2 in cm
-
-
-    vec va(a,0);
-
-    c.LoadIdentity();
-    c.Translate(va);
-    c.Rotate(60.0*TMath::DegToRad());
-    c.Translate(va);
-
-    c.LoadIdentity();
     for(int i=0;i<6;++i) {
-        baf_shape[i] = c.Transform(va);
-        cout << i << ": " << baf_shape[i] << endl;
-        c.Rotate(60.0*TMath::DegToRad());
+        shape.at(i) = s.Transform(va);
+        s.Rotate(60.0*TMath::DegToRad());
     }
-    baf_shape.at(6) = baf_shape.at(0);
-    c.LoadIdentity();
+    shape.at(6) = shape.at(0);
 
-    // create PbWO4 shape
-    pbwo4_shape[0] = vec(+1.299,0-b/2);
-    pbwo4_shape[1] = vec(+1.299,     b-b/2);
-    pbwo4_shape[2] = vec(-a/2.0+1.299,  b-b/2);
-    pbwo4_shape[3] = vec(-a+1.299,    -b/2);
-    pbwo4_shape.at(4) = pbwo4_shape.at(0);
+    return shape;
+}
+
+TH2DrawTool::point_list TH2TAPS::MakePbWO4Shape()
+{
+    TH2DrawTool::point_list shape(5);
+
+    shape.at(0) = vec(+1.299,0-b/2);
+    shape.at(1) = vec(+1.299,     b-b/2);
+    shape.at(2) = vec(-a/2.0+1.299,  b-b/2);
+    shape.at(3) = vec(-a+1.299,    -b/2);
+    shape.at(4) = shape.at(0);
 
     // calculate center of PbWO4 shape
     vec pbwo4_center;
-    for( int i=0;i<pbwo4_shape.size(); ++i) {
-        pbwo4_center += pbwo4_shape.at(i);
+    for( int i=0;i<4; ++i) {
+        pbwo4_center += shape.at(i);
     }
     pbwo4_center /= 4;
+
+    matrixstack s;
+    s.Translate(pbwo4_center);
+
+    for( int i=0;i<shape.size(); ++i) {
+        shape.at(i) = s.Transform(shape.at(i));
+    }
+
+    return shape;
+}
+
+void TH2TAPS::Build()
+{
+    TH2DrawTool c(this);
 
     ifstream conf;
     conf.open(TAPS_CONFIG);
@@ -75,31 +79,27 @@ void TH2TAPS::Build()
 
         c.Translate(pos);
 
-        TH2DrawTool::point_list* shape = NULL;
+        const TH2DrawTool::point_list* shape = NULL;
 
         if( type == "B") {
-            shape = &baf_shape;
+            shape = &baf2_shape;
         }
         else if( type[0] == 'P') {
             switch (type[1]) {
             case '0':
                 shape=&pbwo4_shape;
                 c.Scale(-1,1);
-                c.Translate(pbwo4_center);
                 break;
             case '1':
                 shape=&pbwo4_shape;
-                c.Translate(pbwo4_center);
                 break;
             case '2':
                 shape=&pbwo4_shape;
                 c.Scale(-1,-1);
-                c.Translate(pbwo4_center);
                 break;
             case '3':
                 shape=&pbwo4_shape;
                 c.Scale(1,-1);
-                c.Translate(pbwo4_center);
                 break;
             }
         }
@@ -116,3 +116,9 @@ void TH2TAPS::Build()
     conf.close();
 
 }
+
+const TH2DrawTool::point_list TH2TAPS::baf2_shape = TH2TAPS::MakeBaF2Shape();
+const TH2DrawTool::point_list TH2TAPS::pbwo4_shape = TH2TAPS::MakePbWO4Shape();
+// Build a BaF2 crystal
+const Double_t TH2TAPS::a = 3.464; // edgle length of BaF2 in cm
+const Double_t TH2TAPS::b = 3.0;   // half distance of parallels of BaF2 in cm
