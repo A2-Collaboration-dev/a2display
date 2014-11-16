@@ -6,6 +6,11 @@
 
 using namespace std;
 
+TH2TAPS::TH2TAPS(const string &name, const string &title): TH2Crystals(name,title)
+{
+    Build();
+}
+
 void TH2TAPS::Build()
 {
     TH2DrawTool c(this);

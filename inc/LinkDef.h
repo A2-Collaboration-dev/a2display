@@ -4,6 +4,7 @@
 #pragma link off all classes;
 #pragma link off all functions;
 
+#pragma link C++ class TH2Crystals+;
 #pragma link C++ class TH2CB+;
 #pragma link C++ class TH2TAPS+;
 

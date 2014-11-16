@@ -95,10 +95,9 @@ void TH2CB::MakeLevel(TH2DrawTool &c, const UInt_t n, set<Int_t>::const_iterator
 
 
 
-TH2CB::TH2CB(const string &name, const string &title)
+TH2CB::TH2CB(const string &name, const string &title): TH2Crystals(name,title)
 {
     Build();
-    SetNameTitle(name.c_str(),title.c_str());
 }
 
 Int_t TH2CB::GetBinOfMMC(const UChar_t major, const UChar_t minor, const UChar_t crystal)
@@ -123,15 +122,7 @@ Int_t TH2CB::GetBinOfVBin(const Int_t vbin)
     return binmap.at(vbin);
 }
 
-
-void TH2CB::FillBinNumber()
-{
-    for(int i = 1; i<=GetNumberOfBins(); ++i) {
-        SetBinContent(i,i);
-    }
-}
-
-void TH2CB::FillCrystalNumber()
+void TH2CB::FillCrystalNumbers()
 {
     for(Int_t i=1; i<=720; ++i ) {
         const Int_t bin = GetBinOfVBin(i);

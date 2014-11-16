@@ -10,6 +10,8 @@
 #include "TH2Poly.h"
 #include "Rtypes.h"
 
+#include "a2display.h"
+
 /**
  * @brief The TH2CB class
  *
@@ -25,7 +27,7 @@
  *
  * Element Number (element): The crystals are not cabled in the ordering of the crystals. Acqu uses elements.
  */
-class TH2CB: public TH2Poly {
+class TH2CB: public TH2Crystals {
     ClassDef(TH2CB,1);
 
 protected:
@@ -50,17 +52,14 @@ public:
     static bool IsInHole( const UChar_t a, const UChar_t b, const UChar_t c);
     static bool IsInHole( const Int_t vbin );
 
-    /**
-     * @brief Fill the number of the TH2Poly bin. Useful for debugging only, I guess.
-     */
-    void FillBinNumber();
+
 
     /**
      * @brief Fill in the crystal numbers.
      *
      * Crystal numers count in the same way as the element numbers (ex.: 1/1/1), stating with 0.
      */
-    void FillCrystalNumber();
+    virtual void FillCrystalNumbers();
 
     /**
      * @brief Fill the Major-Minor-Crystal numbers in. ex: 1/1/1 -> 111 and 14/2/8 -> 1428.
@@ -121,7 +120,7 @@ public:
      * @param element Element number [0..720]
      * @return Content of the crystal, 0 if is inside a hole
      */
-    Double_t GetElement(const UInt_t element) const;
+    virtual Double_t GetElement(const UInt_t element) const;
 
     /**
      * @brief Set the value of an element (mapped)
@@ -129,7 +128,7 @@ public:
      * @param value Value to set it it
      * @see SetCrystal720()
      */
-    void SetElement(const UInt_t element, Double_t value);
+    virtual void SetElement(const UInt_t element, Double_t value);
 
     /**
      * @brief Fill a hit pattern (mapped), ordered by element numers
@@ -137,7 +136,7 @@ public:
      * @see FillCrystals720()
      * @see FillCrystals672()
      */
-    void FillElements( const std::vector<Double_t>& pattern );
+    virtual void FillElements( const std::vector<Double_t>& pattern );
 
     /**
      * @brief Get the crystal number for an element number
