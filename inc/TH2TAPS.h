@@ -2,7 +2,6 @@
 #define TH2TAPS_H
 
 #include "TH2DrawTool.h"
-#include "TH2Poly.h"
 #include "a2display.h"
 
 class TH2TAPS: public TH2Crystals {
