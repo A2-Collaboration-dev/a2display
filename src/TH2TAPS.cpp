@@ -1,8 +1,7 @@
 #include "TH2TAPS.h"
 #include "TMath.h"
 
-#include <fstream>
-#include <iostream>
+#include "taps_positions.h"
 
 using namespace std;
 
@@ -55,65 +54,48 @@ TH2DrawTool::point_list TH2TAPS::MakePbWO4Shape()
 }
 
 void TH2TAPS::Build()
-{
+{    
     TH2DrawTool c(this);
-
-    ifstream conf;
-    conf.open(TAPS_CONFIG);
-    if(!conf.is_open()) {
-        cerr << "Could not open TAPS Crytsal config file \"" << TAPS_CONFIG << "\"" << endl;
-        return;
-    }
 
     // Crystal positions in config file are viewed from behind TAPS. Turn this around to get downstream view.
     c.Scale(-1,1);
 
-    while(!conf.eof()) {
-        double z;
+    for( UInt_t i=0; i<NUM_TAPS_CRYSTALS; ++i ) {
+
         UInt_t n;
-        vec pos;
-        string type;
-        conf >> n >> pos.X() >> pos.Y() >> z >> type;
+        const vec pos (taps_positions[i].x,
+                       taps_positions[i].y);
+        const UChar_t& type = taps_positions[i].type;
 
         c.PushMatrix();
 
         c.Translate(pos);
 
-        const TH2DrawTool::point_list* shape = NULL;
-
-        if( type == "B") {
-            shape = &baf2_shape;
-        }
-        else if( type[0] == 'P') {
-            switch (type[1]) {
-            case '0':
-                shape=&pbwo4_shape;
+        switch (type) {
+            case 0:
+                c.Draw(baf2_shape);
+                break;
+            case 1:
                 c.Scale(-1,1);
+                c.Draw(pbwo4_shape);
                 break;
-            case '1':
-                shape=&pbwo4_shape;
+            case 2:
+                c.Draw(pbwo4_shape);
                 break;
-            case '2':
-                shape=&pbwo4_shape;
+            case 3:
                 c.Scale(-1,-1);
+                c.Draw(pbwo4_shape);
                 break;
-            case '3':
-                shape=&pbwo4_shape;
+            case 4:
                 c.Scale(1,-1);
+                c.Draw(pbwo4_shape);
                 break;
-            }
         }
-
-        if( shape ) {
-            c.Draw(*shape);
-            Int_t bin = c.FinishShape();
-            SetBinContent(bin,n);
-            cout << "Element " << n << " at " << pos << " is " << type << endl;
-        }
+        c.FinishShape();
         c.PopMatrix();
     }
 
-    conf.close();
+    SetStats(kFALSE);
 
 }
 
