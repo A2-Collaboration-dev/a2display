@@ -16,8 +16,8 @@ void TH2TAPS::Build()
     TH2DrawTool c(this);
     typedef matrixstack::Vector vec;
 
-    TH2DrawTool::point_list baf_shape(6);
-    TH2DrawTool::point_list pbwo4_shape(4);
+    TH2DrawTool::point_list baf_shape(7);
+    TH2DrawTool::point_list pbwo4_shape(5);
 
     // Build a BaF2 crystal
     const double a = 3.464; // edgle length of BaF2 in cm
@@ -37,6 +37,7 @@ void TH2TAPS::Build()
         cout << i << ": " << baf_shape[i] << endl;
         c.Rotate(60.0*TMath::DegToRad());
     }
+    baf_shape.at(6) = baf_shape.at(0);
     c.LoadIdentity();
 
     // create PbWO4 shape
@@ -44,6 +45,7 @@ void TH2TAPS::Build()
     pbwo4_shape[1] = vec(+1.299,     b-b/2);
     pbwo4_shape[2] = vec(-a/2.0+1.299,  b-b/2);
     pbwo4_shape[3] = vec(-a+1.299,    -b/2);
+    pbwo4_shape.at(4) = pbwo4_shape.at(0);
 
     // calculate center of PbWO4 shape
     vec pbwo4_center;
@@ -51,13 +53,6 @@ void TH2TAPS::Build()
         pbwo4_center += pbwo4_shape.at(i);
     }
     pbwo4_center /= 4;
-
-/*
-    pbwo4_shape[0] = vec( 0.5,   -0.5);
-    pbwo4_shape[1] = vec( 1,    1);
-    pbwo4_shape[2] = vec(-0.5,    0.5);
-    pbwo4_shape[3] = vec(-0.5,   -0.5);
-*/
 
     ifstream conf;
     conf.open(TAPS_CONFIG);
