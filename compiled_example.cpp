@@ -1,4 +1,6 @@
 #include "TH2CB.h"
+#include "TH2TAPS.h"
+#include "TCanvas.h"
 
 #include <vector>
 #include "TRint.h"
@@ -14,9 +16,15 @@ int main(int argc, char** argv) {
         v.at(i)=i;
     }
 
-    TH2CB* cb = new TH2CB();
+    new TCanvas("c_cb","Crystal Ball");
+    TH2CB* cb = new TH2CB("cb","Crystal Ball");
     cb->FillElements(v);
     cb->Draw("text col");
+
+    new TCanvas("c_taps","TAPS");
+    TH2TAPS* taps = new TH2TAPS("taps","TAPS");
+    taps->FillElementNumbers();
+    taps->Draw("text col");
 
     app.Run();
 
