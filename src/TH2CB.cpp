@@ -144,7 +144,7 @@ void TH2CB::FillMMCNumbers()
     }
 }
 
-void TH2CB::FillElementNumers()
+void TH2CB::FillElementNumbers()
 {
     for(Int_t i=0; i<720; ++i ) {
         SetElement(i,i);

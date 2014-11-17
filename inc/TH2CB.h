@@ -68,7 +68,7 @@ public:
     /**
      * @brief Fill in the element numbers. Crystal numers are mapped to element numbers.
      */
-    void FillElementNumers();
+    void FillElementNumbers();
 
     /**
      * @brief Fill a hit pattern (unmapped), only containing existing crystals
