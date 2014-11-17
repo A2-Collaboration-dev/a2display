@@ -215,17 +215,29 @@ void TH2CB::SetElement(const UInt_t element, Double_t value)
     SetCrystal720(GetCrystalOfElement(element), value);
 }
 
-void TH2CB::FillElements(const std::vector<Double_t> &pattern)
+void TH2CB::SetElements(const std::vector<Double_t> &pattern)
 {
-    if(pattern.size()==720) {
+    if(pattern.size()==GetNumberOfElements()) {
 
-        for(int i=0; i<720; ++i ) {
+        for(int i=0; i<GetNumberOfElements(); ++i ) {
 
             SetElement(i,pattern.at(i));
 
         }
     } else {
-        cerr << "TH2CB: FillElements: Wrong pattern size (" << pattern.size() << " / 720)" <<endl;
+        cerr << "TH2CB: FillElements: Wrong pattern size (" << pattern.size() << " / " << GetNumberOfElements() << ")" <<endl;
+    }
+}
+
+void TH2CB::SetElements(const TH1 &h)
+{
+    if( h.GetNbinsX() == GetNumberOfElements() ) {
+        for(Int_t i=1;i<=GetNumberOfElements(); ++i) {
+            SetElement(i-1, h.GetBinContent(i));
+        }
+        SetBinContentChanged(kTRUE);
+    } else {
+        cerr << "Number of bis don't match" << endl;
     }
 }
 

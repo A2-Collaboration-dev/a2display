@@ -135,7 +135,8 @@ public:
      * @see FillCrystals720()
      * @see FillCrystals672()
      */
-    virtual void FillElements( const std::vector<Double_t>& pattern );
+    virtual void SetElements( const std::vector<Double_t>& pattern );
+    virtual void SetElements( const TH1& h );
 
     /**
      * @brief Get the crystal number for an element number
@@ -150,6 +151,8 @@ public:
      * @return element number
      */
     static UInt_t GetElementOfCrystal(const UInt_t crystal );
+
+    UInt_t GetNumberOfElements() const { return 720; }
 
 };
 

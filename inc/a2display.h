@@ -26,11 +26,16 @@ public:
 
     virtual void FillElementNumbers();
 
+    virtual void SetElements( const std::vector<Double_t>& pattern );
+    virtual void SetElements( const TH1& h );
+
+    virtual void FillElement( const UInt_t element, const Double_t w );
     virtual void FillElements( const std::vector<Double_t>& pattern );
+    virtual void FillElements( const TH1& h );
 
-    virtual UInt_t GetNumberOfElements();
+    virtual UInt_t GetNumberOfElements() const;
 
-    virtual void SetAllBins( const Double_t value );
+    virtual void ResetElements( const Double_t value=0.0 );
 
 };
 
