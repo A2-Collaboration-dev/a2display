@@ -30,6 +30,8 @@ public:
 
     virtual UInt_t GetNumberOfElements();
 
+    virtual void SetAllBins( const Double_t value );
+
 };
 
 #endif

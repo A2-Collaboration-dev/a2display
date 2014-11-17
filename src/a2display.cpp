@@ -1,5 +1,6 @@
 #include "a2display.h"
 #include "TDirectory.h"
+#include "TIterator.h"
 #include <iostream>
 
 TH2Crystals::TH2Crystals( const std::string& name, const std::string& title): TH2Poly()
@@ -53,4 +54,17 @@ void TH2Crystals::FillElements(const std::vector<Double_t> &pattern)
 UInt_t TH2Crystals::GetNumberOfElements()
 {
     return GetNumberOfBins();
+}
+
+void TH2Crystals::SetAllBins(const Double_t value)
+{
+    TIter next(fBins);
+    TObject *obj;
+    TH2PolyBin *bin;
+
+    while ((obj = next())) {
+       bin = (TH2PolyBin*) obj;
+       bin->SetContent(value);
+    }
+    SetBinContentChanged(kTRUE);
 }
