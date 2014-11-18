@@ -23,6 +23,22 @@ find_package(ROOT "5.30" REQUIRED)
 include_directories(${ROOT_INCLUDES})
 link_directories(${ROOT_LIBRARY_DIR} ${CURRENT_BINARY_DIR})
 
+find_package(Doxygen)
+
+if(DOXYGEN_FOUND)
+	set(DOXYGEN_INPUT_DIR "${CMAKE_SOURCE_DIR}")
+	find_package(Qt4)
+
+	# we use one global Doxyfile
+	configure_file(${CMAKE_SOURCE_DIR}/Doxyfile.in
+		${CMAKE_BINARY_DIR}/Doxyfile @ONLY)
+	# so we can make it saying "make doc"
+	add_custom_target(doc COMMAND ${DOXYGEN_EXECUTABLE}
+		WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+        file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/doc/doxy)
+endif(DOXYGEN_FOUND)
+
+
 include_directories("inc")
 
 set(SRCS
