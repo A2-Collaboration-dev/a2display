@@ -261,6 +261,16 @@ UInt_t TH2CB::GetElementOfCrystal(const UInt_t crystal)
     }
 }
 
+void TH2CB::SetElements(const TH2CB &h)
+{
+    TH2Crystals::SetElements(h);
+}
+
+void TH2CB::FillElements(const TH2CB &h)
+{
+    TH2Crystals::FillElements(h);
+}
+
 bool TH2CB::IsInHole(const UChar_t a, const UChar_t b, const UChar_t c)
 {
     const Int_t vbin = GetVBinOfMMC(a,b,c);

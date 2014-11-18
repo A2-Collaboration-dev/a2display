@@ -51,7 +51,12 @@ public:
     static bool IsInHole( const UChar_t a, const UChar_t b, const UChar_t c);
     static bool IsInHole( const Int_t vbin );
 
+    // pull in methods from base class
+    using TH2Crystals::SetElements;
+    using TH2Crystals::FillElements;
 
+    virtual void SetElements( const TH2CB& h);
+    virtual void FillElements( const TH2CB& h);
 
     /**
      * @brief Fill in the crystal numbers.

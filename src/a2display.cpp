@@ -5,6 +5,52 @@
 
 using namespace std;
 
+void TH2Crystals::FillElements(const TH2Crystals &h)
+{
+    if( h.GetNumberOfBins() == GetNumberOfBins()) {
+        TIter thisnext(fBins);
+        TIter hnext(h.fBins);
+
+        TH2PolyBin *thisbin=NULL;
+        TH2PolyBin *hbin=NULL;
+
+        while(thisnext() && hnext()) {
+
+            thisbin = (TH2PolyBin*) *thisnext;
+            hbin = (TH2PolyBin*) *hnext;
+
+            const Double_t v = thisbin->GetContent() + hbin->GetContent();
+            thisbin->SetContent(v);
+
+            thisbin->SetChanged(kTRUE);
+        }
+        SetBinContentChanged(kTRUE);
+    } else {
+        cerr << "TH2Crystals::FillElements: Number of bins don't match: ( " << GetNumberOfBins() << " / " << h.GetNumberOfBins() << " )" << endl;
+    }
+}
+
+void TH2Crystals::SetElements(const TH2Crystals &h)
+{
+    if( h.GetNumberOfBins() == GetNumberOfBins()) {
+        TIter thisnext(fBins);
+        TIter hnext(h.fBins);
+
+        TH2PolyBin *thisbin=NULL;
+        TH2PolyBin *hbin=NULL;
+
+        while(thisnext() && hnext()) {
+            thisbin = (TH2PolyBin*) *thisnext;
+            hbin = (TH2PolyBin*) *hnext;
+            thisbin->SetContent(hbin->GetContent());
+            thisbin->SetChanged(kTRUE);
+        }
+        SetBinContentChanged(kTRUE);
+    } else {
+        cerr << "TH2Crystals::SetElements: Number of bins don't match: ( " << GetNumberOfBins() << " / " << h.GetNumberOfBins() << " )" << endl;
+    }
+}
+
 TH2Crystals::TH2Crystals( const std::string& name, const std::string& title): TH2Poly()
 {
     if(!name.empty())

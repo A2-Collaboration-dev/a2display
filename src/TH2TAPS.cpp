@@ -11,6 +11,16 @@ TH2TAPS::TH2TAPS(const string &name, const string &title): TH2Crystals(name,titl
     Build();
 }
 
+void TH2TAPS::FillElements(const TH2TAPS &h)
+{
+    TH2Crystals::FillElements(h);
+}
+
+void TH2TAPS::SetElements(const TH2TAPS &h)
+{
+    TH2Crystals::SetElements(h);
+}
+
 TH2DrawTool::point_list TH2TAPS::MakeBaF2Shape()
 {
     matrixstack s;

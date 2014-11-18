@@ -22,6 +22,12 @@ protected:
 public:
     TH2TAPS( const std::string& name, const std::string& title);
     virtual ~TH2TAPS() {}
+
+    // pulling in methods from base class
+    using TH2Crystals::SetElements;
+    using TH2Crystals::FillElements;
+    virtual void FillElements( const TH2TAPS& h);
+    virtual void SetElements( const TH2TAPS& h);
 };
 
 #endif
