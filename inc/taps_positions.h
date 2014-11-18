@@ -3,6 +3,12 @@
 
 #include "Rtypes.h"
 
+/**
+ * @brief Struct containing the x,y position and type of a TAPS crystal
+ *  types:
+ *    0 = BaF_2
+ *    1..4 = PbWO4's in different orientations
+ */
 typedef struct {
 	Double_t x;
 	Double_t y;
@@ -11,6 +17,9 @@ typedef struct {
 
 #define NUM_TAPS_CRYSTALS 438
 
+/**
+ * @brief TAPS cystal positions and types
+ */
 static const taps_pos_t taps_positions[NUM_TAPS_CRYSTALS] = {
 {-3.849,4.333,1},
 {-6.543,4.333,2},

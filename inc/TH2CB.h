@@ -17,6 +17,8 @@
  *
  * A TH2Poly of the Crystal Ball mesh.
  *
+ *  \image html cb.png
+ *
  * bin number (bin): Index of a bin in the TH2Poly. [1..n], used to access the individual bins with SetBinContent(bin, value), etc.
  *  A bin exists for every physical crystal. There are 672 crystals.
  *
@@ -157,7 +159,14 @@ public:
      */
     static UInt_t GetElementOfCrystal(const UInt_t crystal );
 
+    /**
+     * @brief Get the number of elements
+     *        Crystal Ball also counts crystal positions that are in the hole regions, so there are element indices that do not have a crystal.
+     * @return Number of elements (720)
+     */
     UInt_t GetNumberOfElements() const { return 720; }
+
+
 
 };
 
