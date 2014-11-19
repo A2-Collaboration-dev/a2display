@@ -141,7 +141,8 @@ void TH2CB::FillCrystalNumbers()
 {
     for(Int_t i=1; i<=720; ++i ) {
         const Int_t bin = GetBinOfVBin(i);
-        SetBinContent(bin,i-1);
+        if(bin>0)
+            SetBinContent(bin,i-1);
     }
 }
 
