@@ -15,10 +15,13 @@ void TH2CB::Build()
     const vec& a(shape.at(1));
     const vec& b(shape.at(2));
 
+
+
     std::set<Int_t>::const_iterator nexthole = bins_in_holes.begin();
     UInt_t vbins=0;
 
-    for(int i=0;i<5;++i) {
+    tool.PushMatrix();
+    for(int i=0;i<4;++i) {
 
         for( int j=0; j<2; ++j) {
             MakeLevel(tool,1,nexthole,vbins);
@@ -29,6 +32,18 @@ void TH2CB::Build()
             tool.Scale(-1,-1);
         }
         tool.Translate(2.0*b-a);
+    }
+    tool.PopMatrix();
+
+    tool.Translate(-1.0*a);
+
+    for( int j=0; j<2; ++j) {
+        MakeLevel(tool,1,nexthole,vbins);
+        tool.Translate(a);
+        tool.Scale(-1,-1);
+        MakeLevel(tool,1,nexthole,vbins);
+        tool.Translate(b);
+        tool.Scale(-1,-1);
     }
 
     SetStats(kFALSE);
