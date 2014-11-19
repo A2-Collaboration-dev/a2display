@@ -23,7 +23,6 @@ function (ROOT_GENERATE_DICTIONARY HEADERS LINKDEF_FILE DICTFILE INCLUDE_DIRS)
     message(FATAL_ERROR "Unsupported System for ROOT Dictionary generation")
   endif()
 
-  message(STATUS "DICTFILES: ${DICTFILES}")
   add_custom_command(OUTPUT ${DICTFILES}
     COMMAND
     ${LDPREFIX}=${ROOT_LIBRARY_DIR}
