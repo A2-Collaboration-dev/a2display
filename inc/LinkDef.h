@@ -7,5 +7,7 @@
 #pragma link C++ class TH2Crystals+;
 #pragma link C++ class TH2CB+;
 #pragma link C++ class TH2TAPS+;
+#pragma link C++ class PollingHistogram<TH2CB>+;
+#pragma link C++ class PollingHistogram<TH2TAPS>+;
 
 #endif
