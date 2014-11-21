@@ -11,6 +11,7 @@
 #include "TPaveLabel.h"
 #include "TString.h"
 #include "TList.h"
+#include "TTimer.h"
 
 #include <string>
 #include <iostream>
@@ -25,12 +26,34 @@ protected:
     std::string pollname;
     bool message_displayed;
     TList* messages;
+    TTimer* update_timer;
+
+    virtual TObject* MakeMessage( const std::string& m ) {
+
+        const Double_t xmin = this->GetXaxis()->GetXmin();
+        const Double_t xmax = this->GetXaxis()->GetXmax();
+        const Double_t ymin = this->GetYaxis()->GetXmin();
+        const Double_t ymax = this->GetYaxis()->GetXmax();
+
+        const Double_t x1 = 0.2 * (xmax-xmin) + xmin;
+        const Double_t x2 = 0.8 * (xmax-xmin) + xmin;
+        const Double_t y1 = 0.2 * (ymax-ymin) + ymin;
+        const Double_t y2 = 0.4 * (ymax-ymin) + ymin;
+
+        TPaveLabel* message = new TPaveLabel(x1,y1,x2,y2,m.c_str());
+        return message;
+    }
 
 public:
     PollingHistogram( const std::string& toPoll, const std::string& name="", const std::string& title=""):
-        HistType(name,title), pollname(toPoll), message_displayed(false)
+        HistType(name,title),
+        update_timer(NULL),
+        pollname(toPoll), message_displayed(false)
     { messages = new TList();
-        messages->IsOwner(); }
+        messages->IsOwner();
+        update_timer = new TTimer();
+        update_timer->SetObject(this);
+    }
 
     virtual ~PollingHistogram() {}
 
@@ -60,25 +83,18 @@ public:
         }
     }
 
-    virtual TObject* MakeMessage( const std::string& m ) {
 
-        const Double_t xmin = this->GetXaxis()->GetXmin();
-        const Double_t xmax = this->GetXaxis()->GetXmax();
-        const Double_t ymin = this->GetYaxis()->GetXmin();
-        const Double_t ymax = this->GetYaxis()->GetXmax();
-
-        const Double_t x1 = 0.2 * (xmax-xmin) + xmin;
-        const Double_t x2 = 0.8 * (xmax-xmin) + xmin;
-        const Double_t y1 = 0.2 * (ymax-ymin) + ymin;
-        const Double_t y2 = 0.4 * (ymax-ymin) + ymin;
-
-        TPaveLabel* message = new TPaveLabel(x1,y1,x2,y2,m.c_str());
-        return message;
+    virtual Bool_t HandleTimer(TTimer* timer) {
+        UpdateFromHist();
     }
 
-    virtual void Draw(Option_t *option="") {
-        UpdateFromHist();
-        HistType::Draw(option);
+    virtual void EnableAutoUpdate( const Long_t msec=3000 ) {
+        update_timer->SetTime(msec);
+        update_timer->Start();
+    }
+
+    virtual void DisableAutoUpdate() {
+        update_timer->Stop();
     }
 
 };
