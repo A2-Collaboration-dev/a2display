@@ -58,7 +58,7 @@ public:
     /**
      * @brief Fill the element numbers.
      */
-    virtual void FillElementNumbers();
+    virtual void FillElementNumbers();  //*MENU*
 
     /**
      * @brief Set values of all elements to the ones stored in a std::vector (values ordered by element number)
@@ -87,7 +87,7 @@ public:
      * @brief Reset Elements (clear everything)
      * @param value Value to set the elements to (default 0.0)
      */
-    virtual void ResetElements( const Double_t value=0.0 );
+    virtual void ResetElements( const Double_t value=0.0 );     //*MENU*
 
 };
 

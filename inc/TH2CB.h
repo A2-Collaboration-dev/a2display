@@ -65,17 +65,17 @@ public:
      *
      * Crystal numers count in the same way as the element numbers (ex.: 1/1/1), stating with 0.
      */
-    virtual void FillCrystalNumbers();
+    virtual void FillCrystalNumbers();     //*MENU*
 
     /**
      * @brief Fill the Major-Minor-Crystal numbers in. ex: 1/1/1 -> 111 and 14/2/8 -> 1428.
      */
-    void FillMMCNumbers();
+    void FillMMCNumbers();     //*MENU*
 
     /**
      * @brief Fill in the element numbers. Crystal numers are mapped to element numbers.
      */
-    void FillElementNumbers();
+    void FillElementNumbers();     //*MENU*
 
     /**
      * @brief Fill a hit pattern (unmapped), only containing existing crystals
