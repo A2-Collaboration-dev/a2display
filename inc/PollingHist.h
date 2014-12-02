@@ -81,7 +81,7 @@ public:
                 message_displayed=true;
             }
         }
-    }
+    } //*MENU*
 
 
     virtual Bool_t HandleTimer(TTimer* timer) {
@@ -91,11 +91,15 @@ public:
     virtual void EnableAutoUpdate( const Long_t msec=3000 ) {
         update_timer->SetTime(msec);
         update_timer->Start();
-    }
+    } //*MENU*
 
     virtual void DisableAutoUpdate() {
         update_timer->Stop();
-    }
+    } //*MENU*
+
+    virtual void SetPollName( const char* name="" ) { pollname=name; } //*MENU*
+
+    virtual const char* GetPollName() const { return pollname.c_str(); }
 
 };
 
