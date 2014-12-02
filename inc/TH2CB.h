@@ -145,6 +145,8 @@ public:
     virtual void SetElements( const std::vector<Double_t>& pattern );
     virtual void SetElements( const TH1& h );
 
+    virtual void FillElements( const TH1& h );
+
     /**
      * @brief Get the crystal number for an element number
      * @param element The element number

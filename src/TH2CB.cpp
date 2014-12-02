@@ -278,7 +278,19 @@ void TH2CB::SetElements(const TH1 &h)
         SetBinContentChanged(kTRUE);
     } else {
         cerr << "Number of bis don't match" << endl;
+
+void TH2CB::FillElements(const TH1 &h)
+{
+    if( h.GetNbinsX() != GetNumberOfElements() ) {
+        cerr << "WARNING: Number of bis don't match" << endl;
     }
+
+    const Int_t n = min((Int_t)GetNumberOfElements(), h.GetNbinsX());
+
+    for(Int_t i=1;i<=n; ++i) {
+        SetElement(i-1, GetElement(i-1) + h.GetBinContent(i));
+    }
+    SetBinContentChanged(kTRUE);
 }
 
 UInt_t TH2CB::GetCrystalOfElement(const UInt_t element)
