@@ -55,7 +55,10 @@ public:
         update_timer->SetObject(this);
     }
 
-    virtual ~PollingHistogram() {}
+    virtual ~PollingHistogram() {
+        delete update_timer;
+        delete messages;
+    }
 
     virtual void UpdateFromHist() {
         TH1* h(NULL);
