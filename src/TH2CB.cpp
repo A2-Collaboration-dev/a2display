@@ -271,13 +271,17 @@ void TH2CB::SetElements(const std::vector<Double_t> &pattern)
 
 void TH2CB::SetElements(const TH1 &h)
 {
-    if( h.GetNbinsX() == GetNumberOfElements() ) {
-        for(Int_t i=1;i<=GetNumberOfElements(); ++i) {
-            SetElement(i-1, h.GetBinContent(i));
-        }
-        SetBinContentChanged(kTRUE);
-    } else {
-        cerr << "Number of bis don't match" << endl;
+    if( h.GetNbinsX() != GetNumberOfElements() ) {
+        cerr << "WARNING: Number of bis don't match" << endl;
+    }
+
+    const Int_t n = min((Int_t)GetNumberOfElements(), h.GetNbinsX());
+
+    for(Int_t i=1;i<=n; ++i) {
+        SetElement(i-1, h.GetBinContent(i));
+    }
+    SetBinContentChanged(kTRUE);
+}
 
 void TH2CB::FillElements(const TH1 &h)
 {
