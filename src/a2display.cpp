@@ -101,18 +101,17 @@ void TH2Crystals::SetElements(const std::vector<Double_t> &pattern)
 
 void TH2Crystals::SetElements(const TH1 &h)
 {
-    if( h.GetNbinsX() == GetNumberOfElements() ) {
-        TIter next(fBins);
-        TObject *obj;
-        TH2PolyBin *bin;
-        Int_t hbin=1;
-        while ((obj = next())) {
-           bin = (TH2PolyBin*) obj;
-           bin->SetContent(h.GetBinContent(hbin++));
-        }
-        SetBinContentChanged(kTRUE);
-    } else {
-        cerr << "Number of bis don't match" << endl;
+    if( h.GetNbinsX() != GetNumberOfElements() ) {
+        cerr << "WARNING: Number of bis don't match" << endl;
+    }
+
+    TIter next(fBins);
+    TObject *obj;
+    TH2PolyBin *bin;
+    Int_t hbin=1;
+    while ( (obj = next()) && (hbin <= h.GetNbinsX()) ) {
+       bin = (TH2PolyBin*) obj;
+       bin->SetContent(h.GetBinContent(hbin++));
     }
 }
 
@@ -137,19 +136,20 @@ void TH2Crystals::FillElements(const std::vector<Double_t> &pattern)
 
 void TH2Crystals::FillElements(const TH1 &h)
 {
-    if( h.GetNbinsX() == GetNumberOfElements() ) {
-        TIter next(fBins);
-        TObject *obj;
-        TH2PolyBin *bin;
-        Int_t hbin=1;
-        while ((obj = next())) {
-           bin = (TH2PolyBin*) obj;
-           bin->SetContent( bin->GetContent() + h.GetBinContent(hbin++));
-        }
-        SetBinContentChanged(kTRUE);
-    } else {
-        cerr << "Number of bis don't match" << endl;
+    if( h.GetNbinsX() != GetNumberOfElements() ) {
+        cerr << "WARNING: Number of bis don't match" << endl;
     }
+
+    TIter next(fBins);
+    TObject *obj;
+    TH2PolyBin *bin;
+    Int_t hbin=1;
+    while ( (obj = next()) && (hbin <= h.GetNbinsX()) ) {
+       bin = (TH2PolyBin*) obj;
+       bin->SetContent( bin->GetContent() + h.GetBinContent(hbin++));
+    }
+    SetBinContentChanged(kTRUE);
+
 }
 
 UInt_t TH2Crystals::GetNumberOfElements() const
