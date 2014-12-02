@@ -1,6 +1,7 @@
 #include "TH2CB.h"
 #include "TText.h"
 #include "Rtypes.h"
+#include "TGraph.h"
 
 #include "cb_numbering.h"
 
@@ -61,6 +62,29 @@ void TH2CB::Build()
     outlabel->SetTextSize(0.03);
     outlabel->SetTextAlign(22);  // middle, middle
     GetListOfFunctions()->Add(outlabel);
+
+    for( int major=1;major<=20;++major){
+        for( int minor=1;minor<=4;++minor) {
+            for( int crystal=1;crystal<=9;++crystal) {
+
+                const Int_t bin = GetBinOfMMC(major, minor, crystal);
+
+                if( bin >0) {
+
+                    TH2PolyBin* bin_obj = ((TH2PolyBin*) fBins->At(bin-1));
+                    TGraph* graph = (TGraph*) bin_obj->GetPolygon();
+
+                    const Int_t vbin = GetVBinOfMMC(major,minor,crystal);
+                    if( vbin >=0 ) {
+                        Int_t element = GetElementOfCrystal(vbin-1);
+
+                        graph->SetNameTitle("", Form("Element %d (%d/%d/%d)",element, major, minor, crystal));
+                    }
+                }
+            }
+
+        }
+    }
 
 }
 
