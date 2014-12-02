@@ -1,6 +1,8 @@
 #include "TH2TAPS.h"
 #include "TMath.h"
 #include "TH2Poly.h"
+#include "TGraph.h"
+#include "TString.h"
 
 #include "taps_positions.h"
 
@@ -103,6 +105,14 @@ void TH2TAPS::Build()
         }
         c.FinishShape();
         c.PopMatrix();
+
+        TH2PolyBin* bin_obj = (TH2PolyBin*) fBins->Last();
+        TGraph* polygon = (TGraph*) bin_obj->GetPolygon();
+
+        if( type == 0 )
+            polygon->SetNameTitle("", Form("Element %d (BaF2)",i));
+        else
+            polygon->SetNameTitle("", Form("Element %d (PbWO4)",i));
     }
 
     SetStats(kFALSE);
