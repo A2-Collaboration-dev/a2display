@@ -6,9 +6,9 @@ void cb1()
         cerr << "Could not load liba2display.so\nRun from inside example folder." << endl;
     }
 
-    TH2CB* cb = new TH2CB();
+    TH2CB* cb = new TH2CB("cb", "Crystal Ball");
 
-    cb->FillElementNumber();
+    cb->FillElementNumbers();
 
     cb->Draw("text col");
 }
