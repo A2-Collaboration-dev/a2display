@@ -20,7 +20,7 @@ protected:
     virtual void Build();
 
 public:
-    TH2TAPS( const std::string& name, const std::string& title);
+    TH2TAPS( const std::string& name="", const std::string& title="");
     virtual ~TH2TAPS() {}
 
     // pulling in methods from base class
