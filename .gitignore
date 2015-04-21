@@ -23,7 +23,7 @@
 /build*
 
 # QtCreator
-CMakeLists.txt.user
+CMakeLists.txt.user*
 
 # Doxygen documentation
 # use "make doc" to generate it
