@@ -30,7 +30,7 @@
  * Element Number (element): The crystals are not cabled in the ordering of the crystals. Acqu uses elements.
  */
 class TH2CB: public TH2Crystals {
-    ClassDef(TH2CB,1);
+    ClassDef(TH2CB,1)
 
 protected:
 

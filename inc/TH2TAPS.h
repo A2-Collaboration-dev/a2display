@@ -5,7 +5,7 @@
 #include "a2display.h"
 
 class TH2TAPS: public TH2Crystals {
-    ClassDef(TH2TAPS,1);
+    ClassDef(TH2TAPS,1)
 
 protected:
 
