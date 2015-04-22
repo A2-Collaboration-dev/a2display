@@ -9,5 +9,6 @@
 #pragma link C++ class TH2TAPS+;
 #pragma link C++ class PollingHistogram<TH2CB>+;
 #pragma link C++ class PollingHistogram<TH2TAPS>+;
+#pragma link C++ class CanvasTool+;
 
 #endif
