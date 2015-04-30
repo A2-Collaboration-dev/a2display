@@ -17,6 +17,9 @@ protected:
 
     static const TH2DrawTool::point_list baf2_shape;
     static const TH2DrawTool::point_list pbwo4_shape;
+    
+    void DrawShape(TH2DrawTool &c, bool isBaF2 = false);
+    
     virtual void Build();
 
 public:
